@@ -3,6 +3,7 @@ import { Feature } from "@/types/feature";
 const featuresData: Feature[] = [
   {
     id: 1,
+    bg: "/images/cards/pexels-cami-1793149243-28315082.jpg",   // ✅ new
     icon: (
       <svg width="40" height="41" viewBox="0 0 40 41" className="fill-current">
         <path

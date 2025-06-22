@@ -15,6 +15,16 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 import HouseViewer from "@/components/HouseViewer";
 // import ThreeDMarqueeDemo from "@/components/ui/3d-marquee";
 import { ThreeDMarqueeDemoSecond } from "@/components/3d-marquee-demo";
+import BackgroundGradientDemo from "@/components/background-gradient-demo";
+
+// export default function HomePage() {
+//   return (
+//     <main>
+//       <BackgroundGradientDemo />
+//     </main>
+//   );
+// }
+
 
 import { Metadata } from "next";
 
@@ -42,6 +52,9 @@ export default function Home() {
       {/* <main className="min-h-screen bg-black text-white"> */}
       {/* Any existing content here */}
       <ThreeDMarqueeDemoSecond />
+      {/* <main>
+      <BackgroundGradientDemo />
+    </main> */}
     {/* </main> */}
       {/* <Hero /> */}
       {/* <main className="flex min-h-screen flex-col items-center justify-center bg-stone-950 p-10">
