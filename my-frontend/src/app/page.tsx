@@ -16,6 +16,7 @@ import HouseViewer from "@/components/HouseViewer";
 // import ThreeDMarqueeDemo from "@/components/ui/3d-marquee";
 import { ThreeDMarqueeDemoSecond } from "@/components/3d-marquee-demo";
 import BackgroundGradientDemo from "@/components/background-gradient-demo";
+import PropertyCarousel from '@/components/PropertyCarousel';
 
 // export default function HomePage() {
 //   return (
@@ -67,6 +68,10 @@ export default function Home() {
       {/* <BackgroundBeams /> */}
       <GlowingEffectDemo />
       <Features />
+      <div>
+      <h1 className="text-2xl font-bold text-center mt-6">Featured Properties</h1>
+      <PropertyCarousel />
+    </div>
       {/* <CardHoverEffectDemo /> */}
       <Video />
       <Brands />
