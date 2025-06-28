@@ -60,7 +60,7 @@ const SigninPage = () => {
       }
       
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push('/admin/dashboard');
       
     } catch (err: any) {
       console.error("Login error:", err); // Debug log
