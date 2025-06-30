@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Models\PropertyCategory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
     public function index(): JsonResponse
     {
-        $categories = Category::with('properties:id,category_id,name')
+        $categories = PropertyCategory::with('properties:id,property_category_id,name')
             ->withCount('properties')
             ->orderBy('name')
             ->get();
@@ -26,13 +26,13 @@ class CategoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
+            'name' => 'required|string|max:255|unique:property_categories',
             'description' => 'nullable|string',
             'type' => 'required|in:open,close',
             'is_active' => 'boolean'
         ]);
 
-        $category = Category::create($request->all());
+        $category = PropertyCategory::create($request->all());
 
         return response()->json([
             'success' => true,
@@ -41,10 +41,10 @@ class CategoryController extends Controller
         ], 201);
     }
 
-    public function show(Category $category): JsonResponse
+    public function show(PropertyCategory $category): JsonResponse
     {
         $category->load(['properties' => function($query) {
-            $query->select('id', 'category_id', 'name', 'location', 'price_per_square_feet', 'status');
+            $query->select('id', 'property_category_id', 'name', 'location', 'price_per_square_feet', 'status');
         }]);
 
         return response()->json([
@@ -53,10 +53,10 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function update(Request $request, Category $category): JsonResponse
+    public function update(Request $request, PropertyCategory $category): JsonResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('categories')->ignore($category->id)],
+            'name' => ['required', 'string', 'max:255', Rule::unique('property_categories')->ignore($category->id)],
             'description' => 'nullable|string',
             'type' => 'required|in:open,close',
             'is_active' => 'boolean'
@@ -71,7 +71,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function destroy(Category $category): JsonResponse
+    public function destroy(PropertyCategory $category): JsonResponse
     {
         if ($category->properties()->count() > 0) {
             return response()->json([
@@ -90,7 +90,7 @@ class CategoryController extends Controller
 
     public function getActiveCategories(): JsonResponse
     {
-        $categories = Category::active()
+        $categories = PropertyCategory::active()
             ->select('id', 'name', 'type')
             ->orderBy('name')
             ->get();

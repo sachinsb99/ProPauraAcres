@@ -118,18 +118,6 @@ class ApiService {
   }
 
   // Auth API calls - Updated to match your Laravel routes
-  // async login(email: string, password: string): Promise<LoginResponse> {
-  //   const response = await this.request<LoginResponse>('/auth/login', {
-  //     method: 'POST',
-  //     body: JSON.stringify({ email, password }),
-  //   });
-
-  //   if (response.success && response.data.token) {
-  //     this.setAuthToken(response.data.token);
-  //   }
-
-  //   return response;
-  // }
     async login(credentials: { email: string; password: string }): Promise<LoginResponse> {
     const response = await this.request<LoginResponse>('/auth/login', {
       method: 'POST',

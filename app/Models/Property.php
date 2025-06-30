@@ -96,6 +96,6 @@ class Property extends Model
 
     public function scopeByCategory($query, $categoryId)
     {
-        return $query->where('category_id', $categoryId);
+        return $query->where('property_category_id', $categoryId);
     }
 }

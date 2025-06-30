@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Category extends Model
+class PropertyCategory extends Model
 {
     use HasFactory;
+
+    protected $table = 'property_categories';
 
     protected $fillable = [
         'name',

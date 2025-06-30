@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Property;
 use App\Models\PropertyImage;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PropertyController extends Controller
 {
@@ -47,6 +48,7 @@ class PropertyController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        Log::info('Store ProP: ', $request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
