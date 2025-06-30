@@ -26,7 +26,6 @@ import PropertyCarousel from '@/components/PropertyCarousel';
 //   );
 // }
 
-
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

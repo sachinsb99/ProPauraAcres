@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -51,6 +52,7 @@ public function register(Request $request)
 
     public function login(Request $request)
     {
+        Log::info('LODIN: ', $request->all());
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
@@ -59,10 +61,18 @@ public function register(Request $request)
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
+        // return response()->json([
+        //     'access_token' => $token,
+        //     'token_type'   => 'Bearer',
+        //     'user'         => $user
+        // ]);
         return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'user'         => $user
+            'success' => true,
+            'data' => [
+                'user' => $user,
+                'token' => $token
+            ],
+            'message' => 'Login successful'
         ]);
     }
 
@@ -93,9 +103,53 @@ public function register(Request $request)
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged out successfully'
+        ]);
+    }
+
+    public function profile(Request $request): JsonResponse
+    {
+        Log::info('PROFILE: ', $request->all());
+        return response()->json([
+            'success' => true,
+            'data' => $request->user()
+        ]);
+    }
+
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'zip' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = $request->user();
+        $user->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'data' => $user
+        ]);
     }
 }

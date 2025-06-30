@@ -1,4 +1,4 @@
-// app/admin/layout.tsx
+// app/admin/layout.tsx (Admin Layout)
 import AdminLayout from '@/components/layout/AdminLayout';
 
 export default function AdminRootLayout({
