@@ -160,13 +160,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const propertyMenuItems = [
     {
       icon: List,
-      label: 'All Properties',
-      href: '/admin/properties',
+      label: 'Add Properties',
+      href: '/admin/properties/add',
     },
     {
       icon: Plus,
-      label: 'Add Property',
-      href: '/admin/properties/create',
+      label: 'All Property',
+      href: '/admin/properties/list',
     },
     {
       icon: Tag,

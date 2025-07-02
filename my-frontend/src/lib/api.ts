@@ -1,4 +1,4 @@
-// lib/api.ts - Updated API service with correct routes
+// lib/api.ts - Updated API service with correct FormData handling
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 export interface User {
@@ -56,11 +56,16 @@ class ApiService {
     }
   }
 
-  private getHeaders(): HeadersInit {
+  // FIXED: Modified to handle FormData properly
+  private getHeaders(isFormData: boolean = false): HeadersInit {
     const headers: HeadersInit = {
-      'Content-Type': 'application/json',
       'Accept': 'application/json',
     };
+
+    // Only set Content-Type for non-FormData requests
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
@@ -69,16 +74,20 @@ class ApiService {
     return headers;
   }
 
+  // FIXED: Updated request method to handle FormData
   private async request<T>(
     endpoint: string, 
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     
+    // Check if body is FormData
+    const isFormData = options.body instanceof FormData;
+    
     const response = await fetch(url, {
       ...options,
       headers: {
-        ...this.getHeaders(),
+        ...this.getHeaders(isFormData),
         ...options.headers,
       },
     });
@@ -86,7 +95,13 @@ class ApiService {
     const data = await response.json().catch(() => ({}));
 
     if (!response.ok) {
-      // Handle different error formats
+      // Enhanced error handling for validation errors
+      if (response.status === 422 && data.errors) {
+        const error = new Error(data.message || 'Validation failed');
+        (error as any).response = { status: response.status, data };
+        throw error;
+      }
+      
       const errorMessage = data.message || data.error || `HTTP ${response.status}: ${response.statusText}`;
       throw new Error(errorMessage);
     }
@@ -117,8 +132,8 @@ class ApiService {
     return this.token;
   }
 
-  // Auth API calls - Updated to match your Laravel routes
-    async login(credentials: { email: string; password: string }): Promise<LoginResponse> {
+  // Auth API calls
+  async login(credentials: { email: string; password: string }): Promise<LoginResponse> {
     const response = await this.request<LoginResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
@@ -145,16 +160,14 @@ class ApiService {
       });
       return response;
     } catch (error) {
-      // Even if logout fails on server, we still want to clear local token
       console.error('Logout API error:', error);
       throw error;
     } finally {
-      // Always remove token locally
       this.removeAuthToken();
     }
   }
 
-  // Profile methods - Updated to match your Laravel routes
+  // Profile methods
   async getProfile(): Promise<ApiResponse<User>> {
     return this.request<ApiResponse<User>>('/auth/profile');
   }
@@ -166,14 +179,14 @@ class ApiService {
     });
   }
 
-  // Google OAuth methods - Updated to match your Laravel routes
+  // Google OAuth methods
   getGoogleAuthUrl(): string {
     return `${this.baseURL}/auth/google/redirect`;
   }
 
   async handleGoogleCallback(code: string): Promise<LoginResponse> {
     const response = await this.request<LoginResponse>('/auth/google/callback', {
-      method: 'GET',  // Changed to GET as per Laravel route
+      method: 'GET',
       body: JSON.stringify({ code }),
     });
 
@@ -184,26 +197,35 @@ class ApiService {
     return response;
   }
 
-  // Properties methods (placeholder for future implementation)
+  // Properties methods - FIXED to work with FormData
   async getProperties(): Promise<ApiResponse> {
     return this.request<ApiResponse>('/properties');
   }
 
-  async getProperty(id: number): Promise<ApiResponse> {
-    return this.request<ApiResponse>(`/properties/${id}`);
-  }
+  async getProperty(id: string | number): Promise<ApiResponse> {
+  return this.request<ApiResponse>(`/properties/${id}`);
+}
 
-  async createProperty(data: any): Promise<ApiResponse> {
+  async createProperty(data: FormData): Promise<ApiResponse> {
+    // Debug: Log FormData contents
+    console.log('FormData being sent:');
+    for (let [key, value] of data.entries()) {
+      console.log(`${key}:`, value);
+    }
+    
     return this.request<ApiResponse>('/properties', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data, // FormData will be handled properly now
     });
   }
 
-  async updateProperty(id: number, data: any): Promise<ApiResponse> {
+  async updateProperty(id: string | number, data: FormData | any): Promise<ApiResponse> {
+  const method = data instanceof FormData ? 'POST' : 'PUT';
+  const body = data instanceof FormData ? data : JSON.stringify(data);
+      
     return this.request<ApiResponse>(`/properties/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
+      method,
+      body,
     });
   }
 
@@ -213,7 +235,7 @@ class ApiService {
     });
   }
 
-  // Categories methods (placeholder for future implementation)
+  // Categories methods
   async getCategories(): Promise<ApiResponse> {
     return this.request<ApiResponse>('/categories');
   }

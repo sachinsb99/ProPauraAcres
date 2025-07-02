@@ -82,7 +82,7 @@ Route::prefix('properties')->group(function () {
     Route::get('/', [PropertyController::class, 'index']);
     Route::post('/', [PropertyController::class, 'store']);
     Route::get('/{property}', [PropertyController::class, 'show']);
-    Route::post('/{property}', [PropertyController::class, 'update']); // POST for file uploads
+    Route::put('/{property}', [PropertyController::class, 'update']); // POST for file uploads
     Route::delete('/{property}', [PropertyController::class, 'destroy']);
 });
 
