@@ -178,7 +178,7 @@ const AddPropertyPage: React.FC = () => {
       const response = await apiService.createProperty(submitData);
       
       if (response.success) {
-        router.push('/admin/properties');
+        router.push('/admin/properties/list');
       } else {
         throw new Error(response.message || 'Failed to create property');
       }
@@ -222,7 +222,7 @@ const AddPropertyPage: React.FC = () => {
           <p className="text-white-600">Create a new property listing</p>
         </div>
         <button
-          onClick={() => router.push('/admin/properties')}
+          onClick={() => router.push('/admin/properties/list')}
           className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors flex items-center gap-2"
         >
           <X className="w-4 h-4" />
