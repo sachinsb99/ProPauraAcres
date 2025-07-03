@@ -172,10 +172,10 @@ class PropertyController extends Controller
 
     public function show(Property $property): JsonResponse
     {
-        Log::info('SHOW.............');
+        Log::info('SHOW property...');
         try {
             $property->load('category');
-            
+            Log::info('Property details: ', [$property]);
             return response()->json([
                 'success' => true,
                 'data' => $property

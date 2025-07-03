@@ -24,6 +24,9 @@ import {
 } from 'lucide-react';
 import { apiService } from '@/lib/api';
 
+// Add this constant at the top of your file
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 // TypeScript interfaces
 interface Property {
   id: number;
@@ -117,6 +120,19 @@ const PropertiesListPage: React.FC = () => {
     } finally {
       setDeleting(null);
     }
+  };
+
+  // Add this helper function to get the full image URL
+  const getImageUrl = (imagePath: string | undefined) => {
+    if (!imagePath) return null;
+    
+    // If the image path already starts with http, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Otherwise, construct the full URL
+    return `${API_BASE_URL}/storage/${imagePath}`;
   };
 
   const getStatusIcon = (status: string) => {
@@ -298,17 +314,22 @@ const PropertiesListPage: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-12 w-12 relative">
-                          {property.main_image ? (
+                          {getImageUrl(property.main_image) ? (
                             <img
                               className="h-12 w-12 rounded-lg object-cover"
-                              src={property.main_image}
+                              src={getImageUrl(property.main_image)!}
                               alt={property.name}
+                              onError={(e) => {
+                                // Fallback if image fails to load
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                target.nextElementSibling?.setAttribute('style', 'display: flex');
+                              }}
                             />
-                          ) : (
-                            <div className="h-12 w-12 rounded-lg bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
-                              <ImageIcon className="w-6 h-6 text-gray-400" />
-                            </div>
-                          )}
+                          ) : null}
+                          <div className="h-12 w-12 rounded-lg bg-gray-200 dark:bg-gray-600 flex items-center justify-center" style={{ display: getImageUrl(property.main_image) ? 'none' : 'flex' }}>
+                            <ImageIcon className="w-6 h-6 text-gray-400" />
+                          </div>
                           {property.is_featured && (
                             <Star className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1 fill-current" />
                           )}

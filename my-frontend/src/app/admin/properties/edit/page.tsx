@@ -37,6 +37,28 @@ interface PropertyFormData {
   is_active: boolean;
 }
 
+// interface Property {
+//   id: number;
+//   name: string;
+//   description: string;
+//   property_category_id: number;
+//   location: string;
+//   address: string;
+//   latitude?: number;
+//   longitude?: number;
+//   price_per_square_feet: number;
+//   total_area?: number;
+//   built_area?: number;
+//   bedrooms?: number;
+//   bathrooms?: number;
+//   parking_spaces?: number;
+//   year_built?: number;
+//   main_image?: string;
+//   amenities: string[];
+//   status: 'available' | 'sold' | 'rented' | 'pending';
+//   is_featured: boolean;
+//   is_active: boolean;
+// }
 interface Property {
   id: number;
   name: string;
@@ -54,7 +76,7 @@ interface Property {
   parking_spaces?: number;
   year_built?: number;
   main_image?: string;
-  amenities: string[];
+  amenities: string | string[]; // Updated to handle both string and array
   status: 'available' | 'sold' | 'rented' | 'pending';
   is_featured: boolean;
   is_active: boolean;
@@ -128,29 +150,41 @@ const EditPropertyPage: React.FC = () => {
       if (response.success && response.data) {
         const propertyData = response.data;
         setProperty(propertyData);
-        
-        // Populate form with existing data
-        setFormData({
-          name: propertyData.name || '',
-          description: propertyData.description || '',
-          property_category_id: propertyData.property_category_id || '',
-          location: propertyData.location || '',
-          address: propertyData.address || '',
-          latitude: propertyData.latitude || '',
-          longitude: propertyData.longitude || '',
-          price_per_square_feet: propertyData.price_per_square_feet || '',
-          total_area: propertyData.total_area || '',
-          built_area: propertyData.built_area || '',
-          bedrooms: propertyData.bedrooms || '',
-          bathrooms: propertyData.bathrooms || '',
-          parking_spaces: propertyData.parking_spaces || '',
-          year_built: propertyData.year_built || '',
-          main_image: null, // Will be handled separately for existing images
-          amenities: Array.isArray(propertyData.amenities) ? propertyData.amenities : [],
-          status: propertyData.status || 'available',
-          is_featured: propertyData.is_featured || false,
-          is_active: propertyData.is_active !== undefined ? propertyData.is_active : true,
-        });
+
+        // Parse amenities from JSON string
+let parsedAmenities: string[] = [];
+if (propertyData.amenities) {
+  try {
+    parsedAmenities = typeof propertyData.amenities === 'string' 
+      ? JSON.parse(propertyData.amenities) 
+      : propertyData.amenities;
+  } catch (error) {
+    console.error('Error parsing amenities:', error);
+    parsedAmenities = [];
+  }
+}
+
+setFormData({
+  name: propertyData.name || '',
+  description: propertyData.description || '',
+  property_category_id: propertyData.property_category_id || '',
+  location: propertyData.location || '',
+  address: propertyData.address || '',
+  latitude: propertyData.latitude || '',
+  longitude: propertyData.longitude || '',
+  price_per_square_feet: propertyData.price_per_square_feet || '',
+  total_area: propertyData.total_area || '',
+  built_area: propertyData.built_area || '',
+  bedrooms: propertyData.bedrooms || '',
+  bathrooms: propertyData.bathrooms || '',
+  parking_spaces: propertyData.parking_spaces || '',
+  year_built: propertyData.year_built || '',
+  main_image: null, // Will be handled separately for existing images
+  amenities: parsedAmenities,
+  status: propertyData.status || 'available',
+  is_featured: propertyData.is_featured || false,
+  is_active: propertyData.is_active !== undefined ? propertyData.is_active : true,
+});
       } else {
         throw new Error(response.message || 'Failed to fetch property');
       }
@@ -679,9 +713,13 @@ const EditPropertyPage: React.FC = () => {
               <div className="mb-3">
                 <p className="text-sm text-gray-600 mb-2">Current image:</p>
                 <img 
-                  src={property.main_image} 
+                  src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/storage/${property.main_image}`} 
                   alt="Current property image" 
                   className="w-32 h-24 object-cover rounded border"
+                  onError={(e) => {
+                    console.error('Image failed to load:', property.main_image);
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
                 />
               </div>
             )}

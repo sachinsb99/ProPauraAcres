@@ -203,8 +203,8 @@ class ApiService {
   }
 
   async getProperty(id: string | number): Promise<ApiResponse> {
-  return this.request<ApiResponse>(`/properties/${id}`);
-}
+    return this.request<ApiResponse>(`/properties/${id}`);
+  }
 
   async createProperty(data: FormData): Promise<ApiResponse> {
     // Debug: Log FormData contents
