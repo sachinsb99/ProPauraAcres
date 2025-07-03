@@ -50,11 +50,12 @@ class PropertyController extends Controller
 
     public function index(): JsonResponse
     {
+        Log::info('Index Reached..........');
         try {
             $properties = Property::with('category')
                 ->orderBy('created_at', 'desc')
                 ->get();
-
+            Log::info('properties: ', [$properties]);
             return response()->json([
                 'success' => true,
                 'data' => $properties
