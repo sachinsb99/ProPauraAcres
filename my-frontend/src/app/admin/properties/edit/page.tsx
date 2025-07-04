@@ -37,28 +37,6 @@ interface PropertyFormData {
   is_active: boolean;
 }
 
-// interface Property {
-//   id: number;
-//   name: string;
-//   description: string;
-//   property_category_id: number;
-//   location: string;
-//   address: string;
-//   latitude?: number;
-//   longitude?: number;
-//   price_per_square_feet: number;
-//   total_area?: number;
-//   built_area?: number;
-//   bedrooms?: number;
-//   bathrooms?: number;
-//   parking_spaces?: number;
-//   year_built?: number;
-//   main_image?: string;
-//   amenities: string[];
-//   status: 'available' | 'sold' | 'rented' | 'pending';
-//   is_featured: boolean;
-//   is_active: boolean;
-// }
 interface Property {
   id: number;
   name: string;

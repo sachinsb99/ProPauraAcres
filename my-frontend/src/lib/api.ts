@@ -197,7 +197,7 @@ class ApiService {
     return response;
   }
 
-  // Properties methods - FIXED to work with FormData
+  // Properties methods
   async getProperties(): Promise<ApiResponse> {
     return this.request<ApiResponse>('/properties');
   }

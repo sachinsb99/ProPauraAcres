@@ -5,6 +5,7 @@ import { Navigation, Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { apiService } from '@/lib/api';
 
 // Types based on your database structure
 interface Property {
@@ -38,7 +39,9 @@ interface Property {
 }
 
 interface ApiResponse {
+  success: boolean;
   data: Property[];
+  message?: string;
   meta?: {
     total: number;
     per_page: number;
@@ -47,42 +50,46 @@ interface ApiResponse {
   };
 }
 
-// API service (replace with your actual API service)
-class PropertyService {
-  private baseUrl = '/api'; // Replace with your actual API base URL
-
-  async getProperties(): Promise<ApiResponse> {
-    try {
-      const response = await fetch(`${this.baseUrl}/properties`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch properties');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching properties:', error);
-      throw error;
-    }
-  }
-}
-
 const PropertyCarousel: React.FC = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
-  const propertyService = new PropertyService();
 
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
-        const response = await propertyService.getProperties();
-        setProperties(response.data);
+        console.log('Starting to fetch properties...');
+        
+        const response = await apiService.getProperties();
+        console.log('Fetched properties:', response);
+        
+        // Handle different response structures
+        if (response.success && response.data) {
+          setProperties(response.data);
+        } else if (Array.isArray(response.data)) {
+          setProperties(response.data);
+        } else {
+          // Handle Laravel Eloquent Collection response structure
+          if (Array.isArray(response) && response.length > 0) {
+            const collection = response[0]['Illuminate\\Database\\Eloquent\\Collection'];
+            if (Array.isArray(collection)) {
+              setProperties(collection);
+            } else {
+              setProperties([]);
+            }
+          } else {
+            setProperties([]);
+          }
+        }
+        
         setError(null);
       } catch (err) {
-        setError('Failed to load properties');
         console.error('Error fetching properties:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load properties';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -124,6 +131,21 @@ const PropertyCarousel: React.FC = () => {
     );
   };
 
+  // Function to get the correct image URL
+  const getImageUrl = (imagePath: string) => {
+    if (!imagePath) return '/images/placeholder-property.jpg';
+    
+    // If it's already a full URL, return as is
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Construct the full URL for your Laravel storage
+    // Adjust this base URL to match your Laravel storage configuration
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    return `${baseUrl}/storage/${imagePath}`;
+  };
+
   if (loading) {
     return (
       <div className="px-4 sm:px-6 py-8">
@@ -137,9 +159,20 @@ const PropertyCarousel: React.FC = () => {
   if (error) {
     return (
       <div className="px-4 sm:px-6 py-8">
-        <div className="text-center text-red-500">
-          <p className="text-lg font-medium">Error loading properties</p>
-          <p className="text-sm">{error}</p>
+        <div className="text-center">
+          <div className="text-red-500 mb-4">
+            <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <p className="text-lg font-medium">Error loading properties</p>
+            <p className="text-sm text-gray-600 mt-2">{error}</p>
+          </div>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors"
+          >
+            Retry
+          </button>
         </div>
       </div>
     );
@@ -217,9 +250,13 @@ const PropertyCarousel: React.FC = () => {
               {/* Property Image */}
               <div className="relative h-48 sm:h-52 overflow-hidden">
                 <img 
-                  src={property.main_image || '/images/placeholder-property.jpg'} 
+                  src={getImageUrl(property.main_image || '')} 
                   alt={property.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  onError={(e) => {
+                    // Fallback to placeholder if image fails to load
+                    e.currentTarget.src = '/images/placeholder-property.jpg';
+                  }}
                 />
                 <div className="absolute top-3 left-3 flex gap-2">
                   {property.is_featured && (
