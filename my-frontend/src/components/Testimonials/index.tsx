@@ -5,28 +5,28 @@ import SingleTestimonial from "./SingleTestimonial";
 const testimonialData: Testimonial[] = [
   {
     id: 1,
-    name: "Musharof Chy",
-    designation: "Founder @TailGrids",
+    name: "Aisha Kumar",
+    designation: "Homeowner",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "I never thought I'd find a house that feels like home. This place isn't just a building, it's where my family will make memories for years to come. Thank you for helping us find our dream home!",
     image: "/images/testimonials/auth-01.png",
     star: 5,
   },
   {
     id: 2,
-    name: "Devid Weilium",
-    designation: "Founder @UIdeck",
+    name: "Rahul Mehta",
+    designation: "First-Time Buyer",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "From the first consultation to getting the keys, I felt supported every step of the way. They truly listened to my needs, and now I’m proud to say I’m a homeowner!",
     image: "/images/testimonials/auth-02.png",
     star: 5,
   },
   {
     id: 3,
-    name: "Lethium Frenci",
-    designation: "Founder @Lineicons",
+    name: "Priya Nair",
+    designation: "Homeowner",
     content:
-      "Our members are so impressed. It's intuitive. It's clean. It's distraction free. If you're building a community.",
+      "The journey to our dream villa was smooth and stress-free. This isn't just a property; it’s where we’ll build our future, and I’m forever grateful for the guidance we received.",
     image: "/images/testimonials/auth-03.png",
     star: 5,
   },
@@ -37,8 +37,8 @@ const Testimonials = () => {
     <section className="dark:bg-bg-color-dark bg-gray-light relative z-10 py-16 md:py-20 lg:py-28">
       <div className="container">
         <SectionTitle
-          title="What Our Users Says"
-          paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
+          title="What Our Homeowners Say"
+          paragraph="The joy of finding a home is indescribable. But the journey to get there is unforgettable. Read the stories of families who’ve found their perfect space."
           center
         />
 
