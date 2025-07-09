@@ -10,8 +10,8 @@ const Blog = () => {
     >
       <div className="container">
         <SectionTitle
-          title="Our Latest Blogs"
-          paragraph="There are many variations of passages of Lorem Ipsum available but the majority have suffered alteration in some form."
+          title="Discover Your Dream Home with Us"
+          paragraph="We understand that finding the perfect home is more than just a transaction; it's about finding a place where you can truly belong. Let us help you navigate your journey with care and expertise."
           center
         />
 
