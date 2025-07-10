@@ -29,7 +29,7 @@ import PropertyCarousel from '@/components/PropertyCarousel';
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free Next.js Template for Startup and SaaS",
+  title: "Pro Aura Acres",
   description: "This is Home for Startup Nextjs Template",
   // other metadata
 };
@@ -52,6 +52,7 @@ export default function Home() {
       {/* <main className="min-h-screen bg-black text-white"> */}
       {/* Any existing content here */}
       <ThreeDMarqueeDemoSecond />
+      <AboutSectionTwo />
       {/* <main>
       <BackgroundGradientDemo />
     </main> */}
@@ -65,17 +66,17 @@ export default function Home() {
       </main> */}
 
       {/* <BackgroundBeams /> */}
-      <GlowingEffectDemo />
+      {/* <GlowingEffectDemo /> */}
       <Features />
       <div>
       <h1 className="text-2xl font-bold text-center mt-6">Featured Properties</h1>
       <PropertyCarousel />
     </div>
       {/* <CardHoverEffectDemo /> */}
-      <Video />
+      {/* <Video /> */}
       <Brands />
       <AboutSectionOne />
-      <AboutSectionTwo />
+      
       <Testimonials />
       {/* <Pricing /> */}
       <Blog />
