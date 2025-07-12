@@ -52,7 +52,8 @@ export default function Home() {
       {/* <main className="min-h-screen bg-black text-white"> */}
       {/* Any existing content here */}
       <ThreeDMarqueeDemoSecond />
-      <AboutSectionTwo />
+      <AboutSectionOne />
+      {/* <AboutSectionTwo /> */}
       {/* <main>
       <BackgroundGradientDemo />
     </main> */}
@@ -64,19 +65,13 @@ export default function Home() {
         </h1>
         <HouseViewer />
       </main> */}
-
       {/* <BackgroundBeams /> */}
       {/* <GlowingEffectDemo /> */}
       <Features />
-      <div>
-      <h1 className="text-2xl font-bold text-center mt-6">Featured Properties</h1>
       <PropertyCarousel />
-    </div>
       {/* <CardHoverEffectDemo /> */}
       {/* <Video /> */}
-      <Brands />
-      <AboutSectionOne />
-      
+      {/* <Brands /> */}
       <Testimonials />
       {/* <Pricing /> */}
       <Blog />
