@@ -13,19 +13,9 @@ import GlowingEffectDemo from "@/components/ui/glowing-effect-demo";
 import CardHoverEffectDemo from "@/components/card-hover-effect-demo";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import HouseViewer from "@/components/HouseViewer";
-// import ThreeDMarqueeDemo from "@/components/ui/3d-marquee";
 import { ThreeDMarqueeDemoSecond } from "@/components/3d-marquee-demo";
 import BackgroundGradientDemo from "@/components/background-gradient-demo";
 import PropertyCarousel from '@/components/PropertyCarousel';
-
-// export default function HomePage() {
-//   return (
-//     <main>
-//       <BackgroundGradientDemo />
-//     </main>
-//   );
-// }
-
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

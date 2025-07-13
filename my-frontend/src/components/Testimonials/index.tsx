@@ -253,18 +253,7 @@ const Testimonials = () => {
           </div>
 
           {/* Call to Action */}
-          <div className={`text-center mt-16 transition-all duration-1000 delay-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">Ready to Start Your Journey?</h3>
-              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-                Join hundreds of satisfied homeowners who've found their perfect space with us. 
-                Let's make your dream home a reality.
-              </p>
-              <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Get Started Today
-              </button>
-            </div>
-          </div>
+          
         </div>
 
         {/* Enhanced Background SVG Elements */}

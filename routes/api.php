@@ -2,10 +2,16 @@
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\EnquiryController;
+use App\Http\Controllers\Api\HomeEnquiryController;
+use App\Http\Controllers\Api\HomeInquiryController;
 use App\Http\Controllers\Api\PropertyController;
 use App\Http\Controllers\PropertyImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
+
 
 
 
@@ -93,3 +99,15 @@ Route::prefix('property-images')->group(function () {
     Route::put('/{propertyImage}/reorder', [PropertyImageController::class, 'reorder']);
 });
 
+Route::prefix('enquiry')->group(function () {
+    Route::post('/', [EnquiryController::class, 'store']);
+    
+});
+
+// Admin routes (add authentication middleware as needed)
+    // Route::middleware(['auth:sanctum'])->group(function () {
+    //     Route::get('/', [EnquiryController::class, 'index']);
+    //     Route::get('/{enquiry}', [EnquiryController::class, 'show']);
+    //     Route::patch('/{enquiry}/status', [EnquiryController::class, 'updateStatus']);
+    //     Route::delete('/{enquiry}', [EnquiryController::class, 'destroy']);
+    // });

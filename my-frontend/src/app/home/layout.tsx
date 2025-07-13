@@ -24,7 +24,6 @@
 //   );
 // }
 
-
 "use client";
 
 import Footer from "@/components/Footer";

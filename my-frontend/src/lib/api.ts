@@ -43,6 +43,26 @@ export interface ProfileUpdateData {
   country?: string;
 }
 
+export interface EnquiryData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  // Add other fields as needed
+}
+
+export interface EnquiryResponse {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  // Add other fields as needed
+}
+
 class ApiService {
   private baseURL: string;
   private token: string | null = null;
@@ -74,6 +94,39 @@ class ApiService {
     return headers;
   }
 
+  // // FIXED: Updated request method to handle FormData
+  // private async request<T>(
+  //   endpoint: string, 
+  //   options: RequestInit = {}
+  // ): Promise<T> {
+  //   const url = `${this.baseURL}${endpoint}`;
+    
+  //   // Check if body is FormData
+  //   const isFormData = options.body instanceof FormData;
+    
+  //   const response = await fetch(url, {
+  //     ...options,
+  //     headers: {
+  //       ...this.getHeaders(isFormData),
+  //       ...options.headers,
+  //     },
+  //   });
+
+  //   const data = await response.json().catch(() => ({}));
+
+  //   if (!response.ok) {
+  //     // Enhanced error handling for validation errors
+  //     if (response.status === 422 && data.errors) {
+  //       const error = new Error(data.message || 'Validation failed');
+  //       (error as any).response = { status: response.status, data };
+  //       throw error;
+  //     }
+      
+  //     const errorMessage = data.message || data.error || `HTTP ${response.status}: ${response.statusText}`;
+  //     throw new Error(errorMessage);
+  //   }
+
+  //   return data;
   // FIXED: Updated request method to handle FormData
   private async request<T>(
     endpoint: string, 
@@ -107,6 +160,30 @@ class ApiService {
     }
 
     return data;
+  }
+
+  // ENQUIRY API METHODS
+  // Submit new enquiry
+  async submitEnquiry(enquiryData: EnquiryData): Promise<ApiResponse<EnquiryResponse>> {
+    return this.request<ApiResponse<EnquiryResponse>>('/enquiry', {
+      method: 'POST',
+      body: JSON.stringify(enquiryData),
+    });
+  }
+
+  // Auth methods (add your existing auth methods here)
+  setToken(token: string): void {
+    this.token = token;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('auth_token', token);
+    }
+  }
+
+  clearToken(): void {
+    this.token = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+    }
   }
 
   // Authentication methods
@@ -259,6 +336,88 @@ class ApiService {
       method: 'DELETE',
     });
   }
+
+
+
+  // Get all enquiries with pagination and filtering
+  async getEnquiries(params?: {
+    page?: number;
+    per_page?: number;
+    status?: string;
+    search?: string;
+  }): Promise<ApiResponse<{
+    data: EnquiryResponse[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+  }>> {
+    const queryParams = new URLSearchParams();
+    
+    if (params) {
+      Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined) {
+          queryParams.append(key, value.toString());
+        }
+      });
+    }
+    
+    const queryString = queryParams.toString();
+    const endpoint = `/enquiry${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  // Get single enquiry by ID
+  async getEnquiry(id: number): Promise<ApiResponse<EnquiryResponse>> {
+    return this.request<ApiResponse<EnquiryResponse>>(`/enquiry/${id}`, {
+      method: 'GET',
+    });
+  }
+
+  // Update enquiry status
+  async updateEnquiryStatus(id: number, status: string): Promise<ApiResponse<EnquiryResponse>> {
+    return this.request<ApiResponse<EnquiryResponse>>(`/enquiry/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  // Update entire enquiry
+  async updateEnquiry(id: number, enquiryData: Partial<EnquiryData>): Promise<ApiResponse<EnquiryResponse>> {
+    return this.request<ApiResponse<EnquiryResponse>>(`/enquiry/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(enquiryData),
+    });
+  }
+
+  // Delete enquiry
+  async deleteEnquiry(id: number): Promise<ApiResponse<void>> {
+    return this.request<ApiResponse<void>>(`/enquiry/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Get enquiry statistics (optional - for admin dashboard)
+  async getEnquiryStats(): Promise<ApiResponse<{
+    total: number;
+    pending: number;
+    resolved: number;
+    recent: number;
+  }>> {
+    return this.request<ApiResponse<{
+      total: number;
+      pending: number;
+      resolved: number;
+      recent: number;
+    }>>('/enquiry/stats', {
+      method: 'GET',
+    });
+  }
+
+
 }
 
 export const apiService = new ApiService();
