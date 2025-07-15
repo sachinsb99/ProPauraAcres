@@ -110,9 +110,16 @@ return [
     |
     */
 
-    'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
-    ],
+    // 'from' => [
+    //     'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+    //     'name' => env('MAIL_FROM_NAME', 'Example'),
+    // ],
+
+    'admin_email' => env('MAIL_ADMIN_EMAIL', 'klinton.developer365@gmail.com'),
+
+        'from' => [
+            'address' => env('MAIL_FROM_ADDRESS', 'klinton.developer365@gmail.com'),
+            'name' => env('MAIL_FROM_NAME', 'Prop Aura Acres'),
+        ],
 
 ];

@@ -101,7 +101,6 @@ Route::prefix('property-images')->group(function () {
 
 Route::prefix('enquiry')->group(function () {
     Route::post('/', [EnquiryController::class, 'store']);
-    
 });
 
 // Admin routes (add authentication middleware as needed)

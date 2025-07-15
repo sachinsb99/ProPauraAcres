@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useCallback } from 'react';
 import { Home, Send, CheckCircle, AlertCircle, Mail, Phone, User, MessageSquare, Star, Shield, Clock } from 'lucide-react';
+// import { apiService } from '@/lib/api';
 
 interface FormData {
   name: string;
@@ -14,6 +15,10 @@ interface ValidationErrors {
 }
 
 type SubmitStatus = 'success' | 'error' | 'validation_error' | null;
+
+// You'll need to import your API service
+// import { api } from './path/to/your/api';
+import { apiService } from '@/lib/api';
 
 const HomeEnquiry: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
@@ -88,15 +93,42 @@ const HomeEnquiry: React.FC = () => {
     }
 
     try {
-      // Simulate API call
+      // REPLACE THIS SECTION WITH YOUR ACTUAL API CALL
+      // Example of how to call your API:
+      
+      // Prepare the data for your API
+      const enquiryData = {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        message: formData.message.trim()
+      };
+
+      // Call your actual API
+      const response = await apiService.submitEnquiry(enquiryData);
+      
+      // For now, I'll keep the simulation but add a comment
+      // REMOVE THIS SIMULATION AND UNCOMMENT THE API CALL ABOVE
       await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Only set success if API call succeeds
       setSubmitStatus('success');
       setFormData({ name: '', email: '', phone: '', message: '' });
       setErrors({});
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      
     } catch (error: any) {
       console.error('Error submitting enquiry:', error);
       setSubmitStatus('error');
+      
+      // Handle specific API errors if needed
+      if (error.response?.status === 400) {
+        // Handle validation errors from API
+        if (error.response.data?.errors) {
+          setErrors(error.response.data.errors);
+          setSubmitStatus('validation_error');
+        }
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -133,23 +133,56 @@ class EnquiryController extends Controller
      * Send notification emails
      */
     private function sendNotificationEmails(HomeEnquiry $enquiry)
-    {
-        try {
-            // Send confirmation email to customer
-            Mail::send('emails.enquiry.confirmation', compact('enquiry'), function ($message) use ($enquiry) {
-                $message->to($enquiry->email, $enquiry->name)
-                       ->subject('Your Home Enquiry - Confirmation');
-            });
+{
+    try {
+        // Send confirmation email to customer
+        Mail::send('emails.enquiry.confirmation', compact('enquiry'), function ($message) use ($enquiry) {
+            $message->to($enquiry->email, $enquiry->name)
+                   ->subject('Your Home Enquiry - Confirmation')
+                   ->from(config('mail.from.address'), config('mail.from.name'));
+        });
 
-            // Send notification email to admin
-            $adminEmail = config('mail.admin_email', 'admin@example.com');
+        // Send notification email to admin
+        $adminEmail = config('mail.admin_email');
+        
+        if ($adminEmail) {
+            //Log::info('Admin email used: ' . $adminEmail);
+
             Mail::send('emails.enquiry.notification', compact('enquiry'), function ($message) use ($adminEmail) {
                 $message->to($adminEmail)
-                       ->subject('New Home Enquiry Received');
+                       ->subject('New Home Enquiry Received')
+                       ->from(config('mail.from.address'), config('mail.from.name'));
             });
-
-        } catch (\Exception $e) {
-            Log::error('Failed to send enquiry emails: ' . $e->getMessage());
         }
+
+        Log::info('Enquiry emails sent successfully for: ' . $enquiry->email);
+
+    } catch (\Exception $e) {
+        Log::error('Failed to send enquiry emails: ' . $e->getMessage(), [
+            'enquiry_id' => $enquiry->id ?? 'unknown',
+            'email' => $enquiry->email ?? 'unknown',
+            'error' => $e->getTraceAsString()
+        ]);
     }
+}
+    // private function sendNotificationEmails(HomeEnquiry $enquiry)
+    // {
+    //     try {
+    //         // Send confirmation email to customer
+    //         Mail::send('emails.enquiry.confirmation', compact('enquiry'), function ($message) use ($enquiry) {
+    //             $message->to($enquiry->email, $enquiry->name)
+    //                    ->subject('Your Home Enquiry - Confirmation');
+    //         });
+
+    //         // Send notification email to admin
+    //         $adminEmail = config('mail.admin_email', 'admin@example.com');
+    //         Mail::send('emails.enquiry.notification', compact('enquiry'), function ($message) use ($adminEmail) {
+    //             $message->to($adminEmail)
+    //                    ->subject('New Home Enquiry Received');
+    //         });
+
+    //     } catch (\Exception $e) {
+    //         Log::error('Failed to send enquiry emails: ' . $e->getMessage());
+    //     }
+    // }
 }
