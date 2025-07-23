@@ -11,7 +11,7 @@ const testimonialData: Testimonial[] = [
     name: "Aisha Kumar",
     designation: "Homeowner",
     content:
-      "I never thought I'd find a house that feels like home. This place isn't just a building, it's where my family will make memories for years to come. Thank you for helping us find our dream home!",
+      "I never thought I&apos;d find a house that feels like home. This place isn&apos;t just a building, it&apos;s where my family will make memories for years to come. Thank you for helping us find our dream home!",
     image: "/images/testimonials/auth-01.png",
     star: 5,
   },
@@ -20,7 +20,7 @@ const testimonialData: Testimonial[] = [
     name: "Rahul Mehta",
     designation: "First-Time Buyer",
     content:
-      "From the first consultation to getting the keys, I felt supported every step of the way. They truly listened to my needs, and now I'm proud to say I'm a homeowner!",
+      "From the first consultation to getting the keys, I felt supported every step of the way. They truly listened to my needs, and now I&apos;m proud to say I&apos;m a homeowner!",
     image: "/images/testimonials/auth-02.png",
     star: 5,
   },
@@ -29,7 +29,7 @@ const testimonialData: Testimonial[] = [
     name: "Priya Nair",
     designation: "Homeowner",
     content:
-      "The journey to our dream villa was smooth and stress-free. This isn't just a property; it's where we'll build our future, and I'm forever grateful for the guidance we received.",
+      "The journey to our dream villa was smooth and stress-free. This isn&apos;t just a property; it&apos;s where we&apos;ll build our future, and I&apos;m forever grateful for the guidance we received.",
     image: "/images/testimonials/auth-03.png",
     star: 5,
   },

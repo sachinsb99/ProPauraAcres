@@ -1,5 +1,8 @@
 // lib/api.ts - Updated API service with correct FormData handling
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://prop.justdeall.com/api'  // Your Laravel API URL
+  : 'http://localhost:8000/api';      // Local development
 
 export interface User {
   id: number;
