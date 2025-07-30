@@ -66,6 +66,19 @@ export interface EnquiryResponse {
   // Add other fields as needed
 }
 
+export interface PropertyEnquiryData {
+  fullName: string;
+  email: string;
+  phone: string;
+  propertyType: 'apartment' | 'villa' | 'home';
+}
+
+export interface PropertyEnquiryResponse {
+  enquiry_id: number;
+  status: string;
+  created_at: string;
+}
+
 class ApiService {
   private baseURL: string;
   private token: string | null = null;
@@ -97,56 +110,23 @@ class ApiService {
     return headers;
   }
 
-  // // FIXED: Updated request method to handle FormData
-  // private async request<T>(
-  //   endpoint: string, 
-  //   options: RequestInit = {}
-  // ): Promise<T> {
-  //   const url = `${this.baseURL}${endpoint}`;
-    
-  //   // Check if body is FormData
-  //   const isFormData = options.body instanceof FormData;
-    
-  //   const response = await fetch(url, {
-  //     ...options,
-  //     headers: {
-  //       ...this.getHeaders(isFormData),
-  //       ...options.headers,
-  //     },
-  //   });
-
-  //   const data = await response.json().catch(() => ({}));
-
-  //   if (!response.ok) {
-  //     // Enhanced error handling for validation errors
-  //     if (response.status === 422 && data.errors) {
-  //       const error = new Error(data.message || 'Validation failed');
-  //       (error as any).response = { status: response.status, data };
-  //       throw error;
-  //     }
-      
-  //     const errorMessage = data.message || data.error || `HTTP ${response.status}: ${response.statusText}`;
-  //     throw new Error(errorMessage);
-  //   }
-
-  //   return data;
   // FIXED: Updated request method to handle FormData
   private async request<T>(
-    endpoint: string, 
-    options: RequestInit = {}
-  ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-    
-    // Check if body is FormData
-    const isFormData = options.body instanceof FormData;
-    
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...this.getHeaders(isFormData),
-        ...options.headers,
-      },
-    });
+      endpoint: string, 
+      options: RequestInit = {}
+    ): Promise<T> {
+      const url = `${this.baseURL}${endpoint}`;
+      
+      // Check if body is FormData
+      const isFormData = options.body instanceof FormData;
+      
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...this.getHeaders(isFormData),
+          ...options.headers,
+        },
+      });
 
     const data = await response.json().catch(() => ({}));
 
@@ -173,6 +153,14 @@ class ApiService {
       body: JSON.stringify(enquiryData),
     });
   }
+
+  async submitPropertyEnquiry(enquiryData: PropertyEnquiryData): Promise<ApiResponse<PropertyEnquiryResponse>> {
+    return this.request<ApiResponse<PropertyEnquiryResponse>>('/enquiry/property-enquiry', {
+      method: 'POST',
+      body: JSON.stringify(enquiryData),
+    });
+  }
+
 
   // Auth methods (add your existing auth methods here)
   setToken(token: string): void {
@@ -300,13 +288,13 @@ class ApiService {
   }
 
   async updateProperty(id: string | number, data: FormData | any): Promise<ApiResponse> {
-  const method = data instanceof FormData ? 'POST' : 'PUT';
-  const body = data instanceof FormData ? data : JSON.stringify(data);
-      
-    return this.request<ApiResponse>(`/properties/${id}`, {
-      method,
-      body,
-    });
+    const method = data instanceof FormData ? 'POST' : 'PUT';
+      const body = data instanceof FormData ? data : JSON.stringify(data);
+          
+        return this.request<ApiResponse>(`/properties/${id}`, {
+          method,
+          body,
+        });
   }
 
   async deleteProperty(id: number): Promise<ApiResponse> {
@@ -339,8 +327,6 @@ class ApiService {
       method: 'DELETE',
     });
   }
-
-
 
   // Get all enquiries with pagination and filtering
   async getEnquiries(params?: {

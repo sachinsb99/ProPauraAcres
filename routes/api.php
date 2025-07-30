@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Route;
 
 
 
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -101,6 +96,7 @@ Route::prefix('property-images')->group(function () {
 
 Route::prefix('enquiry')->group(function () {
     Route::post('/', [EnquiryController::class, 'store']);
+    Route::post('/property-enquiry', [EnquiryController::class, 'propertyStore']);
 });
 
 // Admin routes (add authentication middleware as needed)

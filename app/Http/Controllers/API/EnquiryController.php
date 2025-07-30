@@ -45,6 +45,39 @@ class EnquiryController extends Controller
         }
     }
 
+    public function propertyStore(EnquiryRequest $request): JsonResponse
+    {
+        Log::info('Property enquiry data:', $request->all());
+
+        try {
+            // Create new property enquiry record
+            $enquiry = PropertyEnquiry::create($request->validated());
+
+            // Optional: Send notification emails
+            $this->sendNotificationEmails($enquiry);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Enquiry submitted successfully! We\'ll contact you within 24 hours.',
+                'data' => [
+                    'enquiry_id' => $enquiry->id,
+                    'status' => $enquiry->status,
+                    'created_at' => $enquiry->formatted_created_at
+                ]
+            ], 201);
+
+        } catch (\Throwable $e) {
+            Log::error('Property enquiry submission failed: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again.',
+                'error' => config('app.debug') ? $e->getMessage() : 'Internal server error'
+            ], 500);
+        }
+    }
+
+
     /**
      * Get all enquiries (for admin dashboard)
      */

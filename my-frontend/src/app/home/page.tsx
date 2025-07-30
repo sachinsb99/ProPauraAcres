@@ -17,6 +17,7 @@ import { ThreeDMarqueeDemoSecond } from "@/components/3d-marquee-demo";
 import BackgroundGradientDemo from "@/components/background-gradient-demo";
 import PropertyCarousel from '@/components/PropertyCarousel';
 import { Metadata } from "next";
+import PropertyEnquiryModal from "@/components/popup.tsx";
 
 export const metadata: Metadata = {
   title: "Pro Aura Acres",
@@ -39,6 +40,7 @@ export default function Home() {
   return (
     <>
       <ScrollUp />
+      <PropertyEnquiryModal />
       {/* <main className="min-h-screen bg-black text-white"> */}
       {/* Any existing content here */}
       <ThreeDMarqueeDemoSecond />
