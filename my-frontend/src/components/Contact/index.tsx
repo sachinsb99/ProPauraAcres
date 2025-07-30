@@ -170,7 +170,7 @@ const HomeEnquiry: React.FC = () => {
             </div>
           </div>
           <p className="text-2xl text-gray-700 max-w-2xl mx-auto leading-relaxed font-light">
-            Your perfect home is just one message away. Tell us what you're looking for and we'll do the rest.
+            Your perfect home is just one message away. Tell us what you&apos;re looking for and we&apos;ll do the rest.
           </p>
         </div>
 
@@ -244,7 +244,7 @@ const HomeEnquiry: React.FC = () => {
                   Send Your Home Enquiry
                 </h2>
                 <p className="text-gray-600 text-lg">
-                  Quick and simple - we'll get back to you within 24 hours.
+                  Quick and simple - we&apos;ll get back to you within 24 hours.
                 </p>
               </div>
 
@@ -403,7 +403,7 @@ const HomeEnquiry: React.FC = () => {
                       Enquiry sent successfully!
                     </p>
                     <p className="text-emerald-700 mt-1">
-                      We'll contact you within 24 hours with personalized recommendations.
+                      We&apos;ll contact you within 24 hours with personalized recommendations.
                     </p>
                   </div>
                 </div>

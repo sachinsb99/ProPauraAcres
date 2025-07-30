@@ -211,7 +211,7 @@ const SigninPage = () => {
                   </div>
                 </form>
                 <p className="text-body-color text-center text-base font-medium">
-                  Don't you have an account?{" "}
+                  Don&apos;t you have an account?{" "}
                   <Link href="/signup" className="text-primary hover:underline">
                     Sign up
                   </Link>

@@ -122,7 +122,7 @@ const Footer = () => {
                     Find Your Dream Home
                   </h3>
                   <p className="text-gray-300 leading-relaxed mb-4">
-                    Where memories are made and futures begin. We don't just sell properties, 
+                    Where memories are made and futures begin. We don&apos;t just sell properties, 
                     we help you find the perfect place to call home. From cozy apartments to 
                     luxury estates, every property tells a story.
                   </p>

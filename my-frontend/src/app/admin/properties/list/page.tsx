@@ -444,7 +444,7 @@ const PropertiesListPage: React.FC = () => {
             </div>
 
             <p className="text-gray-700 dark:text-gray-300 mb-6">
-              Are you sure you want to delete "<strong>{deleteConfirm.property?.name}</strong>"?
+              Are you sure you want to delete &apos;<strong>{deleteConfirm.property?.name}</strong>&apos;?
             </p>
 
             <div className="flex justify-end gap-3">

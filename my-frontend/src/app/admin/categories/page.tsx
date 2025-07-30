@@ -440,7 +440,7 @@ const CategoriesPage: React.FC = () => {
                     <span className="ml-2 text-sm text-gray-700">Active</span>
                   </label>
                   <p className="mt-1 text-xs text-gray-500">
-                    Inactive categories won't be available for new properties
+                    Inactive categories won&apos;t be available for new properties
                   </p>
                 </div>
               </div>

@@ -210,7 +210,7 @@ const Testimonials = () => {
                 {/* Content */}
                 <div className="mb-6">
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg italic">
-                    "{testimonial.content}"
+                    &quot;{testimonial.content}&quot;
                   </p>
                 </div>
 
